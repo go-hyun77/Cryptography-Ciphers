@@ -56,7 +56,9 @@ string Caesar::encrypt(const string& plaintext){
         if (currentChar > 'Z') {    //account for ASCII values between 91 - 96
             currentChar = 'A' + (currentChar - 'Z' - 1);
         }
-        encryption = encryption + currentChar; //adding the resulting character to the encrypted plaintext variable
+   
+        encryption.push_back(currentChar);  //adding the resulting character to the encrypted plaintext variable
+
     }
     return encryption;
 }
@@ -90,7 +92,10 @@ string Caesar::decrypt(const string& ciphertext){
         if (currentChar < 'A') {    //account for ASCII values less than 65
             currentChar = 'Z' - ('A' - currentChar - 1); 
         }
-        decryption = decryption + currentChar; //adding the resulting character to the decrypted ciphertext
+
+        decryption.push_back(currentChar);  //adding the resulting character to the decrypted ciphertext
+
     }
     return decryption;
 }
+
