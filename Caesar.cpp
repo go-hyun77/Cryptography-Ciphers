@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <string>   /* For C++ strings */
 #include "Caesar.h"
 
 using namespace std;
@@ -35,9 +35,9 @@ string Caesar::encrypt(const string& plaintext){
     refer to slide 54 in classicalciphers
     encryption: ciphertext = encrypt(plaintext) = (plaintext + key) mod 26
     */
-
     int encryptionOffset = stoi(caesarKey) % 26; //convert string stored in caesarKey to int to get the offset
     string encryption = ""; //string to hold the ciphertext
+    char currentChar = ''; //variable to hold current character in the plaintext 
 
     /*
     ASCII A = 65, Z = 90, a = 97, z = 122
@@ -45,18 +45,18 @@ string Caesar::encrypt(const string& plaintext){
 
     for (int i = 0; i < plaintext.length(); i++) {  //loop through plaintext char by char
 
-        char currentChar = plaintext[i];    //variable to hold current character in the plaintext 
+        char currentChar = plaintext[i];   //set current char to first char in plaintext string
 
         if (currentChar >= 'a' && currentChar <= 'z') { //if character is between a and z
             currentChar += 'A' - 'a';
         }
 
-        currentChar += encryptionOffset; //adding the offset to the character
+        currentChar = currentChar + encryptionOffset; //adding the offset to the character
 
         if (currentChar > 'Z') {    //account for ASCII values between 91 - 96
             currentChar = 'A' + (currentChar - 'Z' - 1);
         }
-        encryption += currentChar; //adding the resulting character to the encrypted plaintext variable
+        encryption = encryption + currentChar; //adding the resulting character to the encrypted plaintext variable
     }
     return encryption;
 }
@@ -71,11 +71,11 @@ string Caesar::decrypt(const string& ciphertext){
 
     /*
     refer to slide 54 in classicalciphers
-    decryption: plaintext = decrypt(ciphertext) = (26 + (ciphertext – key)) mod 26
+    decryption: plaintext = decrypt(ciphertext) = (26 + (ciphertext â€“ key)) mod 26
     */
-
     int offsetDecryption = stoi(caesarKey) % 26; //convert string stored in caesarKey to int to get the offset
     string decryption = ""; //string to hold the plaintext
+    char currentChar = ''; //variable to hold current character in the ciphertext 
     
     /*
     ASCII A = 65, Z = 90, a = 97, z = 122
@@ -83,14 +83,14 @@ string Caesar::decrypt(const string& ciphertext){
 
     for (int i = 0; i < ciphertext.length(); i++) { //loop through ciphertext char by char
 
-        char currentChar = ciphertext[i];   //variable to hold current character in the ciphertext 
+        char currentChar = ciphertext[i];   //set current char to first char in ciphertext string 
 
-        currentChar -= offsetDecryption;    //subtracting the offset
+        currentChar = currentChar - offsetDecryption;    //subtracting the offset
 
         if (currentChar < 'A') {    //account for ASCII values less than 65
             currentChar = 'Z' - ('A' - currentChar - 1); 
         }
-        decryption += currentChar; //adding the resulting character to the decrypted ciphertext
+        decryption = decryption + currentChar; //adding the resulting character to the decrypted ciphertext
     }
     return decryption;
 }
