@@ -38,7 +38,7 @@ string Railfence::encrypt(const string& plaintext) {
     /*
     refer to slide 102 in classicalciphers
     get length of ciphertext
-    ciphertext / key
+    ciphertext / key = length of row
     (ciphertext) % (key)
     1st row = .... + (% result)
     2nd row = ....
@@ -61,7 +61,7 @@ string Railfence::encrypt(const string& plaintext) {
 
         depthCounter = 0; //reset the depth counter to maintain the same "distance" between each append per row
 
-        encryption.push_back('\n'); //creates the rows, uncomment when done testing
+        //encryption.push_back('\n'); //creates the rows, uncomment when done testing
     }
     //cout << encryption << endl;   //testing output, uncomment to check if rows outputted properly
     return encryption;
@@ -78,21 +78,22 @@ string Railfence::decrypt(const string& ciphertext){
     /*
     refer to slide 103 in classicalciphers
     get length of ciphertext
-    ciphertext / key
+    ciphertext / key = length of row
     (ciphertext) % (key)
     1st row = .... + (% result)
     2nd row = ....
     3rd row = ....
     */
 
-    string decryption = "";                         //string to hold the plaintext
-    int length = ciphertext.length();               //length of ciphertext parameter
-    int depth = stoi(railfenceKey);                 //converts from string to int data type (how many rows does the railfence have?)
+    string decryption = "";  //string to hold the plaintext
 
-    string encryptedText = "";                      //string to store ciphertext, ciphertext currently has multiple rows
-    int lengthEncrypted = encryptedText.length();   //length of ciphertext
-    bool isDivisible = false;                       //bool to determine if ciphertext is divisible
-    int remainder = lengthEncrypted % depth;        //remainder of length/(# of rows)
+    int depth = stoi(railfenceKey);    //converts from string to int data type (how many rows does the railfence have?)
+    int length = ciphertext.length();  //length of ciphertext parameter
+    int remainder = length % depth;    //remainder of length/(# of rows)
+    int rowLength = length / depth;    //contains number of char per row
+    int column = 0;                    //length of row, used to calculate how many "spaces" to jump in ciphertext
+    int columnCounter = 0;             //iterator to change columns between each decryption.pushback()
+    bool isDivisible = false;          //bool to determine if ciphertext is divisible
 
     if (remainder == 0) {       //determine whether or not ciphertext length has remainder after %
         isDivisible = true;     //no remainder, all rows will be same length
@@ -101,49 +102,44 @@ string Railfence::decrypt(const string& ciphertext){
         isDivisible = false;    //has remainder, 1st row will be longer than others
     }
 
-    
-    for (int i = 0; i < length; i++) {                   //populate encryptedText with parameter ciphertext without rows
-        if (ciphertext[i] != '\n') {                     //ignore new line when parsing string
-            encryptedText.push_back(ciphertext[i]);
-        }
-    }                                                    //left with ciphertext in one long row at this point
-        
-   
-    long int columnCounter = 0;
-    long int column = 0;
-    if (remainder != 0) {
-        column = (lengthEncrypted / depth) + 1;
+    if (remainder != 0) {       //if remainder exists
+        column = (rowLength) + 1;
     }
-    else {
-        column = (lengthEncrypted / depth);
+    else {                      //if no remainder
+        column = (rowLength);
     }
 
-    if (isDivisible) {
-        for (unsigned int k = 0; k < lengthEncrypted / depth; k++) {
-            for (unsigned int l = 0; l < lengthEncrypted; l += (lengthEncrypted / depth)) {
-                decryption.push_back(encryptedText[l + columnCounter]);
+    if (isDivisible) {          //if all rows are same length
+        for (int i = 0; i < rowLength; i++) {
+            for (int j = 0; j < length; j += (rowLength)) {         //skip rowLength amount of spaces to add in order by column
+                decryption.push_back(ciphertext[j + columnCounter]);    //add character to plaintext
             }
-            columnCounter++;
+            columnCounter++;    //increment counter to move to the next column
         }
     }
-    else {
+    else {      //if row length is not the same across all rows
         while (columnCounter != column) {
-            if (columnCounter == column - 1) {
-                for (unsigned int m = 0; m < remainder; m++) {
-                    decryption.push_back(encryptedText[columnCounter]);
-                    columnCounter += (lengthEncrypted / depth) + 1;
+                
+            if (columnCounter == column - 1) {  //account for rows that are + 1 longer than the others
+
+                for (int k = 0; k < remainder; k++) {
+                    decryption.push_back(ciphertext[columnCounter]);    //add character to plaintext
+                    columnCounter += (rowLength) + 1;   //skip spaces to next character 
                 }
                 break;
             }
-            for (unsigned int n = columnCounter; n < lengthEncrypted; n++) {
-                decryption.push_back(encryptedText[n]);
-                if (remainder != 0) {
-                    n++;
-                    remainder--;
+
+            for (int l = columnCounter; l < length; l++) {  //add from beginning
+                decryption.push_back(ciphertext[l]);
+
+                if (remainder != 0) {   //if additional char exists on current row
+                    l++;
+                    remainder--;    //decrement to avoid moving another "space"
                 }
-                n += (lengthEncrypted / depth) - 1;
+
+                l += (rowLength) - 1;   //jump rowLength amount of spaces to next char to pushback in next "column"
             }
-            remainder = lengthEncrypted % depth;
+            remainder = length % depth; //check if we need to skip an additional "space" to get to next "column"
             columnCounter++;
         }
     }
