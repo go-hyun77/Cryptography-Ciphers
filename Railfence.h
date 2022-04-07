@@ -12,8 +12,8 @@ using namespace std;
  * CipherInterface.
  */
 
-class Railfence : public CipherInterface
-{
+class Railfence : public CipherInterface{
+	
 	/** The public members **/
 	public:
 
