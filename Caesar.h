@@ -1,5 +1,5 @@
-#ifndef CAESAR
-#define CAESAR
+#ifndef CAESAR_H
+#define CAESAR_H
 
 #include <string>	/* For C++ strings */
 #include "CipherInterface.h"
