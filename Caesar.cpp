@@ -37,7 +37,7 @@ string Caesar::encrypt(const string& plaintext){
     */
     int encryptionOffset = stoi(caesarKey) % 26; //convert string stored in caesarKey to int to get the offset
     string encryption = ""; //string to hold the ciphertext
-    char currentChar = ''; //variable to hold current character in the plaintext 
+    char currentChar; //variable to hold current character in the plaintext 
 
     /*
     ASCII A = 65, Z = 90, a = 97, z = 122
@@ -77,7 +77,7 @@ string Caesar::decrypt(const string& ciphertext){
     */
     int offsetDecryption = stoi(caesarKey) % 26; //convert string stored in caesarKey to int to get the offset
     string decryption = ""; //string to hold the plaintext
-    char currentChar = ''; //variable to hold current character in the ciphertext 
+    char currentChar; //variable to hold current character in the ciphertext 
     
     /*
     ASCII A = 65, Z = 90, a = 97, z = 122
