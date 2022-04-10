@@ -94,7 +94,7 @@ int main(int argc, char** argv)
 	
 
 	//If setting encryption key was successful
-	if(cipher->setKey(cipherKey)) {
+	//if(cipher->setKey(cipherKey)) {
 		
 		if (action.compare(encrypt) == 0) {	//action is encrypt
 			cipherText = cipher->encrypt(inputText);
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 			plainText = cipher->decrypt(inputText);
 			outFile << plainText;
 		}
-	}
+	//}
 
 	outFile.close();
 	return 0;
