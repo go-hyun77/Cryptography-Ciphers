@@ -13,6 +13,15 @@ Your README file should include:
 
 
 - Gordon Huynh gordonhuynh001@csu.fullerton.edu
-- Wangmo Tenxing wangmot@csu.fullerton.edu
+- Wangmo Tenzing wangmot@csu.fullerton.edu
 
 - Programming Language: C++
+
+-Executing the program:
+1) Open a terminal and type "make" without the quotations.
+2) type "./cipher <cipher name> <key> <enc/dec> <input file> <output file>"
+        ->type the line above without the quotes, and fill in all the angle
+        brackets and remove the angle brackets.
+
+Extra Credit:
+Our group did not have time to attempt the extra credit.
