@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 	ifstream inFile;			//define input output filestream
 	ofstream outFile;
 
-	string select = "";			//string to select a cipher
+	string selectCipher = "";			//string to select a cipher
 	string action = "";			//string to store choice to encrypt or decrypt
 	string encrypt = "ENC";		//string to encrypt
 	string decrypt = "DEC";		//string to decrypt
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 	string vig = "VIG";	//vigenere
 
 	//the arguments to be passed in
-	select = argv[1];		
+	selectCipher = argv[1];		
 	cipherKey = argv[2];
 	action = argv[3];
 	inputFile = argv[4];
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
 	// test command:  ./cipher <cipher name> <key> <enc/dec> <input file> <output file>
 	// test example:  ./cipher CAE 3 ENC input.txt output.txt
-	cout << "Cipher: " << select << endl; 
+	cout << "Cipher: " << selectCipher << endl; 
 	cout << "Key: " << cipherKey << endl;
 	cout << "Action: " << action << endl;
 	cout << "Input File: " << inputFile << endl;
@@ -88,7 +88,7 @@ int main(int argc, char** argv)
 	}
 	if (!cipher->setKey(cipherKey)) {
 		cout << "Invalid Key inputted for the selected cipher." << endl 
-			 << "Selected Cipher: " << select << endl;
+			 << "Selected Cipher: " << selectCipher << endl;
 		exit(-1);
 	}
 	
