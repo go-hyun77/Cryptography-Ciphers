@@ -45,7 +45,7 @@ string Vigenere::encrypt(const string& plainText)
     char charOne;
     int count = 0;
     int index = 0;
-    int temp;
+    int temporary;
     char newChar;
  
     
@@ -53,16 +53,16 @@ string Vigenere::encrypt(const string& plainText)
    {
        for (int i = 0; i < vigenereKey.length(); i++)
        {
-            temp = (int(vigenereKey[i]) - 65 ) + (int(plainText[index]) );
+           temporary = (int(vigenereKey[i]) - 65 ) + (int(plainText[index]) );
 
             // setting ascii range
-                   if (temp > 90)
+                   if (temporary > 90)
                    {
-                       temp = temp - 90 + 64;
+                       temporary = temporary - 90 + 64;
                    }
-                   if (temp > 64 && temp < 91)
+                   if (temporary > 64 && temporary < 91)
                    {
-                       newChar = char(temp);
+                       newChar = char(temporary);
                        encryptedText = encryptedText + newChar;
                    }
 
@@ -107,24 +107,24 @@ string Vigenere::decrypt(const string& cipherText)
     string decryptedText ="";
     int keySize = vigenereKey.length();
     int index = 0;
-    int temp;
+    int tempTwo;
     char newChar;
 
     while (decryptedText.length() < cipherText.length() )
     {
         for (int i = 0; i<vigenereKey.length(); i++)
         {
-            temp = ( int(cipherText[index]) - (int(vigenereKey[i]) - 65 )  );
+            tempTwo = ( int(cipherText[index]) - (int(vigenereKey[i]) - 65 )  );
 
             // put the value into A-Z ASCII range, 65-90
-            if ( 65 > temp )
+            if ( 65 > tempTwo )
             {
-                temp = 91 - (65 - temp);
+                tempTwo = 91 - (65 - tempTwo);
             }
 
-            if (64 < temp  && 91 > temp)
+            if (64 < tempTwo  && 91 > tempTwo)
             {
-                newChar = char(temp);
+                newChar = char(tempTwo);
                 decryptedText = decryptedText + newChar;
             }
 
