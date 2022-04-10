@@ -12,14 +12,13 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	
 	/* Create empty cipher object*/	
 	CipherInterface* cipher = NULL;
 
 	ifstream inFile;			//define input output filestream
 	ofstream outFile;
 
-	string selectCipher = "";			//string to select a cipher
+	string select = "";			//string to select a cipher
 	string action = "";			//string to store choice to encrypt or decrypt
 	string encrypt = "ENC";		//string to encrypt
 	string decrypt = "DEC";		//string to decrypt
@@ -38,7 +37,7 @@ int main(int argc, char** argv)
 	string vig = "VIG";	//vigenere
 
 	//the arguments to be passed in
-	selectCipher = argv[1];		
+	select = argv[1];		
 	cipherKey = argv[2];
 	action = argv[3];
 	inputFile = argv[4];
@@ -46,7 +45,7 @@ int main(int argc, char** argv)
 
 	// test command:  ./cipher <cipher name> <key> <enc/dec> <input file> <output file>
 	// test example:  ./cipher CAE 3 ENC input.txt output.txt
-	cout << "Cipher: " << selectCipher << endl; 
+	cout << "Cipher: " << select << endl; 
 	cout << "Key: " << cipherKey << endl;
 	cout << "Action: " << action << endl;
 	cout << "Input File: " << inputFile << endl;
@@ -54,19 +53,19 @@ int main(int argc, char** argv)
 
 
 	//call the commands, compares to inputted argvs
-	if (current.compare(cae) == 0) {
+	if (select.compare(cae) == 0) {
 		cipher = new Caesar();
 	}
-	else if (current.compare(mon) == 0) {
+	else if (select.compare(mon) == 0) {
 		cipher = new Monoalphabetic();
 	}
-	else if (current.compare(ply) == 0) {
+	else if (select.compare(ply) == 0) {
 		cipher = new Playfair();
 	}
-	else if (current.compare(rfc) == 0) {
+	else if (select.compare(rfc) == 0) {
 		cipher = new Railfence();
 	}
-	else if (current.compare(vig) == 0) {
+	else if (select.compare(vig) == 0) {
 		cipher = new Vigenere();
 	}
 	else {	//if input doesn't match any of the ciphers
@@ -88,7 +87,7 @@ int main(int argc, char** argv)
 	}
 	if (!cipher->setKey(cipherKey)) {
 		cout << "Invalid Key inputted for the selected cipher." << endl 
-			 << "Selected Cipher: " << selectCipher << endl;
+			 << "Selected Cipher: " << select << endl;
 		exit(-1);
 	}
 	
