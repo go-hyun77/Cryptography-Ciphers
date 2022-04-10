@@ -13,7 +13,7 @@ using namespace std;
 string vigenereKey = "";
 //string xAxis = "abcdefghijklmnopqrstuvwxyz";
 //string yAxis = "abcdefghijklmnopqrstuvwxyz";
-string temp = "";
+//string temp = "";
 
 
 bool Vigenere::setKey(const string& key)
