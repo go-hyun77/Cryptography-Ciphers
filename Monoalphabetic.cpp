@@ -65,7 +65,7 @@ string Monoalphabetic::encrypt(const string& plaintext)
 
         for (int j = 0; j < 26; j++) {  //match plaintext character with cipher alphabet
 
-            if (plaintext[l] == alphabet[j]) {
+            if (plaintext[j] == alphabet[j]) {
                 encryption.push_back(monoalphabeticKey[j]); //adding the resulting character to the encrypted plaintext variable
             }
         }
