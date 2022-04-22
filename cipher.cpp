@@ -15,11 +15,11 @@ int main(int argc, char** argv)
 	/* Create empty cipher object*/	
 	CipherInterface* cipher = NULL;
 
-	ifstream inFile;			//define input output filestream
+	ifstream inFile;		//define input output filestream
 	ofstream outFile;
 
 	string cipherSelect = "";	//string to select a cipher
-	string action = "";			//string to store choice to encrypt or decrypt
+	string action = "";		//string to store choice to encrypt or decrypt
 	string encrypt = "ENC";		//string to encrypt
 	string decrypt = "DEC";		//string to decrypt
 	string cipherKey = "";		//string to store key being passed in
