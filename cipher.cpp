@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 	ifstream inFile;			//define input output filestream
 	ofstream outFile;
 
-	string select = "";			//string to select a cipher
+	string cipherSelect = "";	//string to select a cipher
 	string action = "";			//string to store choice to encrypt or decrypt
 	string encrypt = "ENC";		//string to encrypt
 	string decrypt = "DEC";		//string to decrypt
@@ -30,22 +30,23 @@ int main(int argc, char** argv)
 	string outputFile = "";		//string to store name of output file containing cipherText
 	
 	//ciphers to choose from
-	string cae = "CAE";	//caesar
-	string mon = "MON";	//monoalphabetic
-	string ply = "PLY";	//playfair
+	string ces = "CES";	//caesar
+	string mac = "MAC";	//monoalphabetic
+	string plf = "PLF";	//playfair
 	string rfc = "RFC";	//railfence
 	string vig = "VIG";	//vigenere
 
 	//the arguments to be passed in
-	select = argv[1];		
+	cipherSelect = argv[1];
 	cipherKey = argv[2];
 	action = argv[3];
 	inputFile = argv[4];
 	outputFile = argv[5];
 
+
 	// test command:  ./cipher <cipher name> <key> <enc/dec> <input file> <output file>
 	// test example:  ./cipher CAE 3 ENC input.txt output.txt
-	cout << "Cipher: " << select << endl; 
+	cout << "Cipher: " << cipherSelect << endl; 
 	cout << "Key: " << cipherKey << endl;
 	cout << "Action: " << action << endl;
 	cout << "Input File: " << inputFile << endl;
@@ -53,19 +54,19 @@ int main(int argc, char** argv)
 
 
 	//call the commands, compares to inputted argvs
-	if (select.compare(cae) == 0) {
+	if (cipherSelect.compare(ces) == 0) {
 		cipher = new Caesar();
 	}
-	else if (select.compare(mon) == 0) {
+	else if (cipherSelect.compare(mac) == 0) {
 		cipher = new Monoalphabetic();
 	}
-	else if (select.compare(ply) == 0) {
+	else if (cipherSelect.compare(plf) == 0) {
 		cipher = new Playfair();
 	}
-	else if (select.compare(rfc) == 0) {
+	else if (cipherSelect.compare(rfc) == 0) {
 		cipher = new Railfence();
 	}
-	else if (select.compare(vig) == 0) {
+	else if (cipherSelect.compare(vig) == 0) {
 		cipher = new Vigenere();
 	}
 	else {	//if input doesn't match any of the ciphers
@@ -87,24 +88,20 @@ int main(int argc, char** argv)
 	}
 	if (!cipher->setKey(cipherKey)) {
 		cout << "Invalid Key inputted for the selected cipher." << endl 
-			 << "Selected Cipher: " << select << endl;
+			 << "Selected Cipher: " << cipherSelect << endl;
 		exit(-1);
 	}
 	
 	
 
-	//If setting encryption key was successful
-	//if(cipher->setKey(cipherKey)) {
-		
-		if (action.compare(encrypt) == 0) {	//action is encrypt
-			cipherText = cipher->encrypt(inputText);
-			outFile << cipherText;
-		}
-		else if (action.compare(decrypt) == 0) { //action is decrypt
-			plainText = cipher->decrypt(inputText);
-			outFile << plainText;
-		}
-	//}
+	if (action.compare(encrypt) == 0) {	//action is encrypt
+		cipherText = cipher->encrypt(inputText);
+		outFile << cipherText;
+	}
+	else if (action.compare(decrypt) == 0) { //action is decrypt
+		plainText = cipher->decrypt(inputText);
+		outFile << plainText;
+	}
 
 	outFile.close();
 	return 0;
