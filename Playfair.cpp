@@ -1,55 +1,48 @@
-#include "Playfair.h"
 #include <iostream>
+#include <iterator>
 #include <string>
+#include "Playfair.h"
+
 using namespace std;
 
 
+//helper function to get the characters for the matrix given the coordinates*/
+char playfair::getCharacter(int x, int y)
+{
+	return playfairMatrix[(y + 5) % 5][(x + 5) % 5];	//return character 
+}
+
+/*the other helper function to get the coordinates of the matrix given the characters*/
+bool playfair::getCoordinates(char a, int& x, int& y)
+{
+	for (int i = 0; i < 5; i++) {	//traverse x axis
+
+		for (int j = 0; j < 5; j++) {	//traverse y axis
+
+			if (playfairMatrix[i][j] == a) {	//if match found
+				x = j;
+				y = i;
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 /**
  * Sets the key to use
  * @param key - the key to use
  * @return - True if the key is valid and False otherwise
  */
-
-string playfairKey = "";
-char playfairMatrix [5][5] = {0};
-string alphabet = "abcdefghiklmnopqrstuvwxyz";
-string temp = "";
-bool isDuplicate = false;
-string newPlaintext = "";
-
 bool Playfair::setKey(const string& key)
 {
-    playfairKey = key;
-    
-    //check to make sure the key is all letters
-    for (int i = 0; i < playfairKey.length(); i++)
-    {
-        if (!isalpha(playfairKey[i])) {
-            cout << "error in key" << endl;
-            return false;
-        }
-    }
-    cout << "The key is " << playfairKey << "." << endl;
-    return true;
+	if (key.length() > 0) {		//if key exists
+		playfairKey = key;	//set key
+		return true; 
+	}
+	return false; 
 }
 
-//find row and column postions for each letter
-void Playfair::findPositionInMatrix(char letter, int &row, int &col)
-{
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 5; j++)
-        {
-            if (letter == playfairMatrix[i][j])
-            {
-                row = i;
-                col = j;
-                return;
-            }
-        }
-    }
-}
 
 /**	
  * Encrypts a plaintext string
@@ -58,143 +51,90 @@ void Playfair::findPositionInMatrix(char letter, int &row, int &col)
  */
 string Playfair::encrypt(const string& plaintext)
 {
-    //adding alphabet to our key
-    temp = playfairKey + alphabet;
-    cout << "this is temp: " << temp << "\n";
-    
-    //we want to make sure playfairKey has no duplicates
-    //flayfairKey = securityabcdefghijklmnopqrstuvwxyz
-    
-    for (int i = 0; i < playfairKey.length(); i++)
-    {
-        for (int j = i + 1; j < temp.length(); j++)
-        {
-            if (playfairKey[i] == temp[j])  //go into this lock if the same letters appears more than once
-            {
-                cout << "Duplicate found: " << temp[j] << "\n";
-                //erase duplicate letter
-                temp.erase(j, 1);
-                break;
-            }
-        }
-    }
-    playfairKey = temp;
-    cout << "This is the key without duplicates: " << playfairKey << "\n";
-    
-    //so now let's insert key into our 5x5 matrix
-    //so matrix will look like: secur ityab dfghk lmnop qvwxz
-    //UPPERCASE LETTERS ARE IGNORED FOR NOW
-    
-    for (int i = 0; i < playfairKey.length(); i++)
-    {
-        (playfairMatrix[0][i] = playfairKey[i]);
-        //cout << playfairMatrix[0][i] << " | ";
-    }
-    cout << "\n";
-    
-   /* //print out matrix--not really needed, cause i have it up above
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 5; j++)
-        {
-            cout << playfairMatrix[i][j] << " | ";
-        }
-    }
-    cout << endl; */
-    
+	string encryption = "";				//string to hold the ciphertext
 
-    //print matrix in 5x5 table format
-    int rows = 5;
-    int columns = 5;
-    
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < columns; j++)
-        {
-            cout << " " << playfairMatrix[i][j] << " | ";   //prints matrix out
-        }
-        cout << "\n";
-    }
-    cout << "\n";
-     
- 
-    //split up key into digrams
-    //plaintext: "hello world" is passed in
-    //first we want to make sure there are no 2 letters that are the same next to each other
-    
-    string withX = "";
-    int size = plaintext.length();
-    
-    for (int i = 1; i < size; ++i)
-    {
-        if (!isspace(plaintext[i-1]))
-        {
-            withX += plaintext[i-1];
-        }
-        if (plaintext[i-1] == plaintext[i])
-            withX += 'x';
-    }
-    
-    //now reading in the last letter and seeing if there is an odd number of letters in the key
-    withX += plaintext[size - 1];
-   // if (withX.length() % 2 == 1)
-    if ((withX.length() & 1) == 1)
-    {
-        withX += 'x';
-    }
-    cout << "this is withX: " << withX << "\n";
-    
-    
-    //find position in matrix
-    //we will encrypt 2 letters at a time
-    string encryptedString = "";
-    int row1;
-    int column1;
-    int row2;
-    int column2;
-    
-    for(int pos = 0; pos < size; pos += 2)
-    {
-        
-        findPositionInMatrix(plaintext[pos], row1, column1);
-        findPositionInMatrix(plaintext[pos+1], row2, column2);
-        
-        //implementing encryption rules
-        //1. If the two letter pair is in the same row, move each letter one space to the right
-        
-        if (row1 == row2)
-        {
-            //output += playfairMatrix[row1][mod(column1+1, 5)];
-            //row values stay the same
-            
-            int mod1 = (column1 + 1 % 5);
-            int mod2 = (column2 + 1 % 5);
-            encryptedString += playfairMatrix[row1][mod1];
-            encryptedString += playfairMatrix[row2][mod2];
-            //cout << "row == row " << ": " << encryptedString << "\n";
-            
-        }
-        else if (column1 == column2)
-        {
-            int mod3 = (row1 + 1 % 5);
-            int mod4 = (row2 + 1 % 5);
-            encryptedString += playfairMatrix[mod3][column1];
-            encryptedString += playfairMatrix[mod4][column2];
-            
-            //cout << "output is " << encryptedString << "\n";
-        }
-        else
-        {
-            
-            encryptedString += playfairMatrix[row1][column2];
-            encryptedString += playfairMatrix[row2][column1];
-            
-            //cout << "regular encryption" << ": " << encryptedString << "\n";
-            
-        }
-    }
-    cout << "THE FINAL ENCRYPTED STRING IS: " << encryptedString << "\n";
-	return encryptedString;
+	string playfairMatrixValues = "";	//string to hold matrix values, will be used to populate actual 5x5 matrix later
+	string originalText = plaintext;	//string to hold plaintext to perform indexing on
+	int length = originalText.length(); //get length of plaintext 
+	string pairs = "";					//string to hold letters in blocks of two
+
+	int x1, x2, y1, y2;		//variables to hold coordinates for the intersections in the matrix
+	
+	playfairKey = playfairKey + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //append alphabet to key to create basis for matrix
+
+	
+	for (string::iterator iterator = playfairKey.begin(); iterator != playfairKey.end(); iterator++) {	//iterate through parameter and append values to playfairMatrixValues
+
+		*iterator = toupper(*iterator);	//changes to uppercase
+
+		if ((*iterator < 65) || (*iterator > 90)) {	//if character is valid uppercase letter, move to next character 
+			continue;		
+		}
+
+		if (*iterator == 'I') {	//if I detected, matches to J 
+			*iterator = 'J';
+		}
+
+		if (playfairMatrixValues.find(*iterator) == -1) {	//if character that is not yet added to originalText is found, append 
+			playfairMatrixValues += *iterator;
+		}
+	}
+
+	copy(playfairMatrixValues.begin(), playfairMatrixValues.end(), &playfairMatrix[0][0]);	//copy values into playfairMatrix
+
+	for (string::iterator iterator = originalText.begin(); iterator != originalText.end(); iterator++) {	//iterate through plaintext, remove I when J is encountered
+
+		*iterator = toupper(*iterator);
+
+		if ((*iterator < 65) || (*iterator > 90)) {	//if character is valid uppercase letter, move to next character
+			continue;
+		}
+
+		if (*iterator == 'I') {	//if I detected, matches to J
+			*iterator = 'J';
+		}
+	}
+
+	for (int i = 0; i < length; i += 2) {	//iterate by twos, and add X to duplicate characters
+
+		pairs += originalText[i];	//append values to pairs for indexing
+
+		if (i + 1 < length) {	//while not end of plaintext
+
+			if (originalText[i] == originalText[i + 1]) {	//compare current and next character and check for match
+				pairs += 'X';	//append X if pair detected
+			}
+
+			pairs += originalText[i + 1]; //move to next "pair"
+		}
+	}
+
+	if (pairs.length() % 2 == 1) {	//check for odd number of letters
+		pairs += 'X';	//appends X
+	}
+
+	for (string::iterator iterator = pairs.begin(); iterator != pairs.end(); iterator++) {	//iterate through plaintext, now in pairs
+
+		if (getCoordinates(*iterator++, x1, y1)) {	//get coordinates of first character in pair
+
+			if (getCoordinates(*iterator, x2, y2)) {	//get coordinates of second character in pair
+
+				if (x1 == x2) { //if same row, append next character in the same row for both
+					encryption += getCharacter(x1, y1 + 1);
+					encryption += getCharacter(x2, y2 + 1);
+				}
+				else if (y1 == y2) { //if same column, append next character in same column for both
+					encryption += getCharacter(x1 + 1, y1);
+					encryption += getCharacter(x2 + 1, y2);
+				}
+				else {	//normal, append intersection between row/column of the two characters
+					encryption += getCharacter(x2, y1);
+					encryption += getCharacter(x1, y2);
+				}
+			}
+		}
+	}
+	return encryption;
 }
 
 /**
@@ -204,47 +144,95 @@ string Playfair::encrypt(const string& plaintext)
  */
 string Playfair::decrypt(const string& cipherText) 
 {
-    //no need to remove the X's
-    string decryptedString = "";
-    int row1, column1, row2, column2;
-    int size = cipherText.length();
-    
-    for(int pos = 0; pos < size; pos += 2)
-    {
-        findPositionInMatrix(cipherText[pos], row1, column1);
-        findPositionInMatrix(cipherText[pos+1], row2, column2);
-        
-        //implementing encryption rules
-        //1. If the two letter pair is in the same row, move each letter one space to the right
-        
-        if (row1 == row2)
-        {
-            int mod1 = (column1 - 1 % 5);
-            int mod2 = (column2 - 1 % 5);
-            decryptedString += playfairMatrix[row1][mod1];
-            decryptedString += playfairMatrix[row2][mod2];
-            //cout << "row == row " << ": " << decryptedString << "\n";
-        }
-        
-        //move each letter down one
-        else if (column1 == column2)
-        {
-            int mod3 = (row1 - 1 % 5);
-            int mod4 = (row2 - 1 % 5);
-            decryptedString += playfairMatrix[mod3][column1];
-            decryptedString += playfairMatrix[mod4][column2];
-            
-           // cout << "output is " << decryptedString << "\n";
-            
-        }
-        else
-        {
-            decryptedString += playfairMatrix[row1][column2];
-            decryptedString += playfairMatrix[row2][column1];
-            
-            //cout << "regular encryption" << ": " << decryptedString << "\n";
-        }
-    }
-    cout << "THE FINAL DECRYPTED STRING IS: " << decryptedString << "\n";
-    return decryptedString;
+	string decryption = "";	//string to hold decrypted text
+
+	string playfairMatrixValues = "";		//string to hold matrix values, will be used to populate actual 5x5 matrix later
+	string encryptedText = ciphertext;		//string to hold ciphertext to perform indexing on
+	int length = encryptedText.length();	//get length of ciphertext
+	string pairs = "";						//string to hold letters in blocks of two
+
+	int x1, x2, y1, y2;		//variables to hold coordinates for the intersections in the matrix
+
+	playfairKey = playfairKey + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //append alphabet to key to create basis for matrix
+
+
+	for (string::iterator iterator = playfairKey.begin(); iterator != playfairKey.end(); iterator++) {	//iterate through parameter and append values to playfairMatrixValues
+
+		*iterator = toupper(*iterator);	
+		
+		if (*iterator == 'I') {		//if I detected, matches to J 
+			*iterator = 'J';
+		}
+
+		if (playfairMatrixValues.find(*iterator) == -1) {	//if character that is not yet added to originalText is found, append 
+			playfairMatrixValues += *iterator;
+		}
+	}
+
+	copy(playfairMatrixValues.begin(), playfairMatrixValues.end(), &playfairMatrix[0][0]); //populate matrix
+
+	cout << "Matrix" << endl;
+	for (int i = 0; i < 5; i++) {		//print matrix to check 
+
+		for (int j = 0; j < 5; j++) {
+			cout << playfairMatrix[i][j];
+		}
+		cout << '\n';
+	}
+
+	
+	for (string::iterator iterator = encryptedText.begin(); iterator != encryptedText.end(); iterator++) {	//iterate through ciphertext, replace I with J 
+
+		*iterator = toupper(*iterator);	
+
+		if ((*iterator < 65) || (*iterator > 90)) {	//if character is valid, go next
+			continue;
+		}
+		
+		if (*iterator == 'I') {	//if I is found, set to J
+			*iterator = 'J';
+		}
+	}
+
+	
+	for (int i = 0; i < length; i += 2) {	//iterate by twos, and add X to duplicate characters
+
+		pairs += encryptedText[i];	//append values to pairs for indexing
+
+		if (i + 1 < length) {	//while not at end of encrypted text
+
+			if (encryptedText[i] == encryptedText[i + 1]) {	//if pair detected
+				pairs += 'X';
+			}
+			pairs += encryptedText[i + 1];
+		}
+	}
+
+	if (pairs.length() % 2 == 1) {	//check for odd numbers
+		pairs += 'X';	//append X
+	}
+
+	
+	for (string::iterator iterator = pairs.begin(); iterator != pairs.end(); iterator++) {	//iterate through plaintext, now in pairs
+
+		if (getCoordinates(*iterator++, x1, y1)) {	//get coordinates of first character in pair
+
+			if (getCoordinates(*iterator, x2, y2)) {	//get coordinates of second character in pair
+
+				if (x1 == x2) {	//if same row, append next character in the same row for both
+					decryption += getCharacter(x1, y1 - 1);
+					decryption += getCharacter(x2, y2 - 1);
+				}
+				else if (y1 == y2) {	//if same column, append next character in same column for both
+					decryption += getCharacter(x1 - 1, y1);
+					decryption += getCharacter(x2 - 1, y2);
+				}
+				else {	//normal, append intersection between row/column of the two characters
+					decryption += getCharacter(x2, y1);
+					decryption += getCharacter(x1, y2);
+				}
+			}
+		}
+	}
+	return decryption;
 }
