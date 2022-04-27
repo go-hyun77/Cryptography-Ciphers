@@ -27,8 +27,6 @@ class Playfair: public CipherInterface
 		 */
 		virtual bool setKey(const string& key);
 
-        //Finds the position in matrix
-        virtual void findPositionInMatrix(char letter, int &row, int &col);
 		/**	
 		 * Encrypts a plaintext string
 		 * @param plaintext - the plaintext string
@@ -49,10 +47,20 @@ class Playfair: public CipherInterface
 		 */
 		void printMatrix(FILE* fp);
 		
-		/* The protected members */
+
+	/** The public members **/
+	private:
+
+		bool getCoordinates(char a, int& x, int& y);
+		char getCharacter(int x, int y);
+
+	/* The protected members */
 	protected:
-	
+
+		string playfairKey; //key for playfair cipher
+		char playfairMatrix[5][5]; //5x5 2d array to hold playfair matrix
 
 };
 
 #endif
+
