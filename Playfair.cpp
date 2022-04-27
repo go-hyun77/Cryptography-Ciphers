@@ -7,13 +7,13 @@ using namespace std;
 
 
 //helper function to get the characters for the matrix given the coordinates*/
-char playfair::getCharacter(int x, int y)
+char Playfair::getCharacter(int x, int y)
 {
 	return playfairMatrix[(y + 5) % 5][(x + 5) % 5];	//return character 
 }
 
 /*the other helper function to get the coordinates of the matrix given the characters*/
-bool playfair::getCoordinates(char a, int& x, int& y)
+bool Playfair::getCoordinates(char a, int& x, int& y)
 {
 	for (int i = 0; i < 5; i++) {	//traverse x axis
 
