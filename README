@@ -22,5 +22,6 @@ Your README file should include:
 Extra Credit:
 Our group did not have time to attempt the extra credit.
 
-Note: This is the re-submit after the error was brought to our attention
-      regarding the incorrect strings used for denoting each cipher.
+Note: This is the re-submit addressing the lack of output from the Vigenere and Playfair ciphers, 
+      the PrintMatrix() function in the Playfair.h file was not implemented; the Playfair matrix
+      is printed with a simple nested for loop upon decryption.
