@@ -9,27 +9,23 @@ using namespace std;
  * @param key - the key to use
  * @return - True if the key is valid and False otherwise
  */
-
-string vigenereKey = "";
-//string xAxis = "abcdefghijklmnopqrstuvwxyz";
-//string yAxis = "abcdefghijklmnopqrstuvwxyz";
-//string temp = "";
-
-
 bool Vigenere::setKey(const string& key)
 {
-    vigenereKey = key;
-    char value;
-    
-    for (int i = 0; i < vigenereKey.length(); i++)
-    {
-        if (!isalpha(vigenereKey[i])) {
-            cout << "Key can only contain letters." << "\n";
+    if (key.length() > 0) {     //if key exists
+        for (int i = 0; i < key.length(); i++) {
+            if (!isalpha(key[i])) {    //if non-alphabet character detected, throw error
+                return false;
+            }
+            if (key[i] >= 'a' && key[i] <= 'z') {	//check for lowercase
+                vigenereKey += key[i] + 'A' - 'a';  //change to uppercase 
+            }
+            else if (key[i] >= 'A' && key[i] <= 'Z') {  //if letter is valid
+                vigenereKey += key[i];
+            }
         }
+        return true;
     }
-    cout << "The key is " << vigenereKey << "." << "\n";
-    
-    return true;
+    return false;
 }
 
 /**
@@ -37,62 +33,27 @@ bool Vigenere::setKey(const string& key)
  * @param plaintext - the plaintext string
  * @return - the encrypted ciphertext string
  */
-
-
 string Vigenere::encrypt(const string& plainText)
 {
-    string encryptedText = "";
-    char charOne;
-    int count = 0;
-    int index = 0;
-    int temporary;
-    char newChar;
- 
-    
-   while (encryptedText.length() < plainText.length())
-   {
-       for (int i = 0; i < vigenereKey.length(); i++)
-       {
-           temporary = (int(vigenereKey[i]) - 65 ) + (int(plainText[index]) );
+    string encryption = ""; //string to hold the ciphertext
 
-            // setting ascii range
-                   if (temporary > 90)
-                   {
-                       temporary = temporary - 90 + 64;
-                   }
-                   if (temporary > 64 && temporary < 91)
-                   {
-                       newChar = char(temporary);
-                       encryptedText = encryptedText + newChar;
-                   }
+    for (int x = 0, y = 0; x < plainText.length(); x++) {
+        
+        char currentChar = plainText[x];
 
-                   index++;
-               }
-           }
-          
-    
-    /*//create table
-    int table[26][26] = {};
-    for (int i = 0; i < 26; i++)
-    {
-        for (int j = 0; j < 26; j++)
-        {
-            int temporary = 0;
-            if((i+65)+j > 90)
-            {
-                temporary = ((i+65)+j) - 26;
-                table[i][j] = temporary;  //adds letter to the correct table position
-            }
-            else
-            {
-                temporary = (i+65)+j;
-                table[i][j] = temporary;   //adds letter to the correct table position
-            }
+        if (currentChar >= 'a' && currentChar <= 'z') { //if current character is between a and z
+            currentChar += 'A' - 'a';   //add current character to "difference" between vigenere table length
         }
-    } */
-    
-    cout << "the encrypted text is: " << encryptedText << endl;
-    return encryptedText;
+        else if (currentChar < 'A' || currentChar > 'Z') { //if uppercase caught, skip current iteration of loop and continue
+            continue;
+        }
+
+        encryption += (currentChar + vigenereKey[y] - 2 * 'A') % 26 + 'A'; //append current character to encryption,
+                                                                           //add value of A to bring back in ASCII range of A-Z
+
+        y = (y + 1) % vigenereKey.length(); 
+    }
+    return encryption;
 }
 
 /**
@@ -100,37 +61,24 @@ string Vigenere::encrypt(const string& plainText)
  * @param cipherText - the ciphertext
  * @return - the plaintext
  */
-
-
 string Vigenere::decrypt(const string& cipherText)
 {
-    string decryptedText ="";
-    int keySize = vigenereKey.length();
-    int index = 0;
-    int tempTwo;
-    char newChar;
+    string decryption = ""; //string to hold the plaintext
 
-    while (decryptedText.length() < cipherText.length() )
-    {
-        for (int i = 0; i<vigenereKey.length(); i++)
-        {
-            tempTwo = ( int(cipherText[index]) - (int(vigenereKey[i]) - 65 )  );
+    for (int x = 0, y = 0; x < ciphertext.length(); x++) {
 
-            // put the value into A-Z ASCII range, 65-90
-            if ( 65 > tempTwo )
-            {
-                tempTwo = 91 - (65 - tempTwo);
-            }
+        char currentChar = ciphertext[x];
 
-            if (64 < tempTwo  && 91 > tempTwo)
-            {
-                newChar = char(tempTwo);
-                decryptedText = decryptedText + newChar;
-            }
-
-            index++;
+        if (currentChar >= 'a' && currentChar <= 'z') { //if current character is between a and z
+            currentChar += 'A' - 'a';   //add current character 
         }
+        else if (currentChar < 'A' || currentChar > 'Z') {
+            continue;
+        }
+        decryption += (currentChar - vigenereKey[y] + 26) % 26 + 'A';   //append current character to encryption,
+                                                                        //add value of A to bring back in ASCII range of A-Z
+        y = (y + 1) % vigenereKey.length();
     }
-    cout << "the decrypted text is: " << decryptedText << endl;
-    return decryptedText;
+    return decryption;
 }
+
