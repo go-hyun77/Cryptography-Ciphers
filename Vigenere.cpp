@@ -65,9 +65,9 @@ string Vigenere::decrypt(const string& cipherText)
 {
     string decryption = ""; //string to hold the plaintext
 
-    for (int x = 0, y = 0; x < ciphertext.length(); x++) {
+    for (int x = 0, y = 0; x < cipherText.length(); x++) {
 
-        char currentChar = ciphertext[x];
+        char currentChar = cipherText[x];
 
         if (currentChar >= 'a' && currentChar <= 'z') { //if current character is between a and z
             currentChar += 'A' - 'a';   //add current character 
@@ -81,4 +81,5 @@ string Vigenere::decrypt(const string& cipherText)
     }
     return decryption;
 }
+
 
