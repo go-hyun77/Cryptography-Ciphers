@@ -7,7 +7,7 @@
 using namespace std;
 
 /**
- * This class implements the Monoalphabetic cipher.
+ * This class implements the Vigenere cipher.
  * The class extends the abstract class
  * CipherInterface.
  */
@@ -38,13 +38,13 @@ class Vigenere : public CipherInterface{
          */
         virtual string decrypt(const string& ciphertext);
 
+        
+    /*the private members*/
+    private:
 
     /*protected members*/
     protected:
-
-
-    /*the private members*/
-    private:
+        string vigenereKey;
 
 };
 
