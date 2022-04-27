@@ -147,7 +147,7 @@ string Playfair::decrypt(const string& cipherText)
 	string decryption = "";	//string to hold decrypted text
 
 	string playfairMatrixValues = "";		//string to hold matrix values, will be used to populate actual 5x5 matrix later
-	string encryptedText = ciphertext;		//string to hold ciphertext to perform indexing on
+	string encryptedText = cipherText;		//string to hold ciphertext to perform indexing on
 	int length = encryptedText.length();	//get length of ciphertext
 	string pairs = "";						//string to hold letters in blocks of two
 
